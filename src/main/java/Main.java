@@ -46,7 +46,7 @@ public class Main {
 
         System.out.println("ÏÎÑËÅÅÅÅÅÅÅÅÅ");
         System.out.println(accountsList);
-        System.out.println("Âñåãî: " + StaticClass.a);
+        System.out.println("Âñåãî: " + StaticClass.commonCounter.get());
         System.out.println("Íåóäà÷íî:" + StaticClass.b);
         long sumAfter = accountService.getSumOnAllAccounts(accountsList);
         System.out.println("Overall balance " + sumBefore);

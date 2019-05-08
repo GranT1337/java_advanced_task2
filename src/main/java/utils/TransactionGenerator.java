@@ -42,7 +42,7 @@ public class TransactionGenerator {
         System.out.println(amountMoney);
         System.out.println(listAccounts.get(accountFrom));
         System.out.println(listAccounts.get(accountTo));
-        StaticClass.a++;
+        StaticClass.commonCounter.getAndIncrement();
 
 
         if (listAccounts.get(accountFrom).getBalance() < amountMoney ) {

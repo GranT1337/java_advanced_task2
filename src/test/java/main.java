@@ -24,12 +24,12 @@ public class main {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[2000][0];
+        return new Object[500][0];
     }
 
     @Test
     public void dummy() {
-        StaticClass.a = 0;
+        StaticClass.commonCounter.set(0);
         AccountGenerator accountGenerator = new AccountGenerator();
         AccountService accountService = new AccountService();
         accountGenerator.createRandomAccounts();
@@ -57,12 +57,12 @@ public class main {
 
         System.out.println("ПОСЛЕЕЕЕЕЕЕЕЕ");
         System.out.println(accountsList);
-        System.out.println(StaticClass.a);
+        System.out.println(StaticClass.commonCounter.get());
         long sumAfter = accountService.getSumOnAllAccounts(accountsList);
         System.out.println("Overall balance " + sumBefore);
         System.out.println("Overall balance " + sumAfter);
 
-        Assert.assertEquals(NUMBER_OF_TRANSACTION, StaticClass.a);
+        Assert.assertEquals(NUMBER_OF_TRANSACTION, StaticClass.commonCounter.get());
         Assert.assertEquals(sumBefore, sumAfter);
     }
 }
