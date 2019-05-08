@@ -16,7 +16,7 @@ public class AccountGenerator {
     public static final int NUMBER_OF_ACCOUNTS = 10;
     private static final String LOCATION = "accounts";
     private static final long MIN_BALANCE = 1000;
-    private static final long MAX_BALANCE = 2000;
+    private static final long MAX_BALANCE = 60000;
 
 
     public void createRandomAccounts() {

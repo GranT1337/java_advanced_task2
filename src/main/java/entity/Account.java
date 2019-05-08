@@ -2,12 +2,14 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Account implements Serializable {
 
     private long id;
     private String name;
     private long balance;
+    private ReentrantLock lock = new ReentrantLock();
 
     public Account(long id, String name, long balance) {
         this.id = id;
@@ -39,6 +41,11 @@ public class Account implements Serializable {
         this.balance = balance;
     }
 
+    public ReentrantLock getLock() {
+        return lock;
+    }
+
+
     @Override
     public String toString() {
         return "entity.Account{" +
@@ -58,6 +65,7 @@ public class Account implements Serializable {
                 balance == account.balance &&
                 Objects.equals(name, account.name);
     }
+
 
     @Override
     public int hashCode() {

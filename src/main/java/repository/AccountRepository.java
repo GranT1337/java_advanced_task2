@@ -19,9 +19,6 @@ public class AccountRepository {
         accountList = new AccountService().readAccountsFromFile();
     }
 
-
-
-
     public static AccountRepository getInstance() {
         if (instance == null) {
             instance = new AccountRepository();
