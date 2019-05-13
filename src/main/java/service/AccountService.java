@@ -37,13 +37,4 @@ public class AccountService {
     public long getSumOnAllAccounts(List<Account> accountList) {
         return accountList.stream().mapToLong(Account::getBalance).sum();
     }
-
-
-    public long subtractMoney(long amount, Account account) {
-        long newBalance = account.getBalance() - amount;
-        account.setBalance(newBalance);
-        return newBalance;
-    }
-
-
 }

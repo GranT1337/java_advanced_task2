@@ -7,7 +7,8 @@ import repository.AccountRepository;
 import service.AccountService;
 import service.StaticClass;
 import utils.AccountGenerator;
-import utils.ThreadTransaction;
+import thread.ThreadTransaction;
+import utils.TransactionGenerator;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +25,7 @@ public class main {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[500][0];
+        return new Object[100][0];
     }
 
     @Test
@@ -32,6 +33,7 @@ public class main {
         StaticClass.commonCounter.set(0);
         AccountGenerator accountGenerator = new AccountGenerator();
         AccountService accountService = new AccountService();
+        TransactionGenerator transactionGenerator = new TransactionGenerator();
         accountGenerator.createRandomAccounts();
 
         List<Account> accountsList = AccountRepository.getInstance().getAccountList();
@@ -44,7 +46,7 @@ public class main {
 
         ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-        IntStream.range(0,NUMBER_OF_TRANSACTION).forEach(i -> executorService.submit(new ThreadTransaction()));
+        IntStream.range(0,NUMBER_OF_TRANSACTION).forEach(i -> executorService.submit(new ThreadTransaction(transactionGenerator.getPairAccountAndAmount())));
         executorService.shutdown();
 
         try {
@@ -57,7 +59,8 @@ public class main {
 
         System.out.println("ПОСЛЕЕЕЕЕЕЕЕЕ");
         System.out.println(accountsList);
-        System.out.println(StaticClass.commonCounter.get());
+        System.out.println("Всего: " + StaticClass.commonCounter.get());
+        System.out.println("Неудачно:" + StaticClass.counterOfFailedOperations.get());
         long sumAfter = accountService.getSumOnAllAccounts(accountsList);
         System.out.println("Overall balance " + sumBefore);
         System.out.println("Overall balance " + sumAfter);

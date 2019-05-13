@@ -1,10 +1,9 @@
 import entity.Account;
 import service.StaticClass;
-import service.TransactionService;
 import utils.AccountGenerator;
 import repository.AccountRepository;
 import service.AccountService;
-import utils.ThreadTransaction;
+import thread.ThreadTransaction;
 import utils.TransactionGenerator;
 
 import java.util.List;
@@ -21,6 +20,7 @@ public class Main {
     public static void main(String[] args) {
         AccountGenerator accountGenerator = new AccountGenerator();
         AccountService accountService = new AccountService();
+        TransactionGenerator transactionGenerator = new TransactionGenerator();
         accountGenerator.createRandomAccounts();
 
         List<Account> accountsList = AccountRepository.getInstance().getAccountList();
@@ -33,7 +33,10 @@ public class Main {
 
         ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-        IntStream.range(0,NUMBER_OF_TRANSACTION).forEach(i -> executorService.submit(new ThreadTransaction()));
+        IntStream.range(0,NUMBER_OF_TRANSACTION).forEach(i -> executorService.submit(
+                new ThreadTransaction(transactionGenerator.getPairAccountAndAmount()))
+        );
+
         executorService.shutdown();
 
         try {
@@ -47,7 +50,7 @@ public class Main {
         System.out.println("œŒ—À≈≈≈≈≈≈≈≈≈");
         System.out.println(accountsList);
         System.out.println("¬ÒÂ„Ó: " + StaticClass.commonCounter.get());
-        System.out.println("ÕÂÛ‰‡˜ÌÓ:" + StaticClass.b);
+        System.out.println("ÕÂÛ‰‡˜ÌÓ:" + StaticClass.counterOfFailedOperations.get());
         long sumAfter = accountService.getSumOnAllAccounts(accountsList);
         System.out.println("Overall balance " + sumBefore);
         System.out.println("Overall balance " + sumAfter);

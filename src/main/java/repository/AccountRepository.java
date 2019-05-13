@@ -25,4 +25,8 @@ public class AccountRepository {
         }
         return instance;
     }
+
+    public static int getSizeAccountList() {
+        return instance.getAccountList().size();
+    }
 }
