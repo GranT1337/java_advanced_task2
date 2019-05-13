@@ -48,11 +48,9 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Account{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", balance=" + balance +
-                '}' + "\n";
+        return "id - " + id +
+                " name - " + name +
+                " balance - " + balance;
     }
 
 

@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import repository.AccountRepository;
 import service.AccountService;
-import service.StaticClass;
+import service.Counters;
 import utils.AccountGenerator;
 import thread.ThreadTransaction;
 import utils.TransactionGenerator;
@@ -30,23 +30,23 @@ public class main {
 
     @Test
     public void dummy() {
-        StaticClass.commonCounter.set(0);
+        Counters.commonCounter.set(0);
         AccountGenerator accountGenerator = new AccountGenerator();
         AccountService accountService = new AccountService();
         TransactionGenerator transactionGenerator = new TransactionGenerator();
+
         accountGenerator.createRandomAccounts();
-
         List<Account> accountsList = AccountRepository.getInstance().getAccountList();
-
-        System.out.println("ДОООО");
-        System.out.println(accountsList);
 
         long sumBefore = accountService.getSumOnAllAccounts(accountsList);
 
 
         ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-        IntStream.range(0,NUMBER_OF_TRANSACTION).forEach(i -> executorService.submit(new ThreadTransaction(transactionGenerator.getPairAccountAndAmount())));
+        IntStream.range(0,NUMBER_OF_TRANSACTION).forEach(i -> executorService.submit(
+                new ThreadTransaction(transactionGenerator.getPairAccountAndAmount()))
+        );
+
         executorService.shutdown();
 
         try {
@@ -56,16 +56,10 @@ public class main {
         }
 
 
-
-        System.out.println("ПОСЛЕЕЕЕЕЕЕЕЕ");
-        System.out.println(accountsList);
-        System.out.println("Всего: " + StaticClass.commonCounter.get());
-        System.out.println("Неудачно:" + StaticClass.counterOfFailedOperations.get());
         long sumAfter = accountService.getSumOnAllAccounts(accountsList);
-        System.out.println("Overall balance " + sumBefore);
-        System.out.println("Overall balance " + sumAfter);
 
-        Assert.assertEquals(NUMBER_OF_TRANSACTION, StaticClass.commonCounter.get());
+
+        Assert.assertEquals(NUMBER_OF_TRANSACTION, Counters.commonCounter.get());
         Assert.assertEquals(sumBefore, sumAfter);
     }
 }

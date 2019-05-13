@@ -1,11 +1,15 @@
 import entity.Account;
-import service.StaticClass;
+import org.apache.log4j.Logger;
+import service.Counters;
 import utils.AccountGenerator;
 import repository.AccountRepository;
 import service.AccountService;
 import thread.ThreadTransaction;
 import utils.TransactionGenerator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,17 +20,17 @@ public class Main {
 
     private static final int NUMBER_OF_THREADS = 20;
     private static final int NUMBER_OF_TRANSACTION = 1000;
+    private final static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
         AccountGenerator accountGenerator = new AccountGenerator();
         AccountService accountService = new AccountService();
         TransactionGenerator transactionGenerator = new TransactionGenerator();
-        accountGenerator.createRandomAccounts();
 
+        accountGenerator.createRandomAccounts();
         List<Account> accountsList = AccountRepository.getInstance().getAccountList();
 
-        System.out.println("ДОООО");
-        System.out.println(accountsList);
+        logger.info("Все аккаунты до переводов: " + accountsList + "\n" );
 
         long sumBefore = accountService.getSumOnAllAccounts(accountsList);
 
@@ -46,17 +50,11 @@ public class Main {
         }
 
 
-
-        System.out.println("ПОСЛЕЕЕЕЕЕЕЕЕ");
-        System.out.println(accountsList);
-        System.out.println("Всего: " + StaticClass.commonCounter.get());
-        System.out.println("Неудачно:" + StaticClass.counterOfFailedOperations.get());
+        logger.info("Все аккаунты после переводов: " + accountsList + "\n");
+        logger.info("Всего операций: " + Counters.commonCounter.get());
+        logger.info("Неудачных операций: " + Counters.counterOfFailedOperations.get());
         long sumAfter = accountService.getSumOnAllAccounts(accountsList);
-        System.out.println("Overall balance " + sumBefore);
-        System.out.println("Overall balance " + sumAfter);
-
-
-
-
+        logger.info("Balance amount before transfers " + sumBefore);
+        logger.info("Balance amount after transfers  " + sumAfter);
     }
 }
